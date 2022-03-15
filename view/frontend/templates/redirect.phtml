@@ -1,0 +1,49 @@
+<?php /** @var \MagArs\Bexs\Block\Redirect $block */ ?>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Test Article</h3>
+            </div>
+            <div class="panel-body" >
+                Awesome Article Description
+                <hr/>
+                <div id="iframe"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    require(['jquery'], function ($) {
+
+    });
+</script>
+<script>
+    const openCheckout = (urlProvidedByService, paymentID) => {
+        console.log(urlProvidedByService, paymentID);
+        const options = {
+            paymentSuccess: () => {
+                console.log("Payment success");
+                window.location = '<?php echo $block->getIframeURL($block->getBexsId()) ?>';
+            },
+            paymentFail: () => {
+                console.log("Payment fail");
+                window.location = '<?php echo $block->getFailureUrl($block->getBexsId()) ?>';
+            },
+            iframeFallback: () => {
+                console.log("iframe fallback");
+            },
+            changeOrder: () => {
+                console.log("change order");
+            }
+        }
+        //Invoking Bexs checkout function
+        window.CheckoutBexs(urlProvidedByService, 'iframe', options);
+    };
+    window.onload = function(){
+        const urlLocal = '<?php echo $block->getIframeURL() ?>';
+        const paymentID = '<?php echo $block->getBexsId() ?>';
+        openCheckout(urlLocal, paymentID);
+    }
+</script>

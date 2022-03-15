@@ -1,0 +1,55 @@
+<?php /** @var $block \MagArs\Paysafe\Block\Success */ ?>
+<?php
+$block->getPaymentStatus();
+?>
+<div class="container">
+    <div class="checkout-success">
+        <fieldset class="fieldset login" data-hasrequired="* Required Fields">
+            <div class="field note"><?= __('Your transaction is still pending. Please click on refresh button to complete the transaction') ?></div>
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button type="button" class="action" name="refresh" id="refresh"><span><?= __('Refresh') ?></span></button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+<script type="text/javascript">
+    require([
+        "jquery",
+        "mage/mage"
+    ],function($) {
+        $(document).ready(function() {
+            $("#refresh").click(function() {
+                $.ajax({
+                    url: "<?php echo $this->getBaseUrl() . 'paysafe/payment/capture'?>",
+                    data: {
+                        payment_id: "<?= $block->getRequest()->getParam('payment_id') ?>"
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        // show some loading icon
+                        $("body").trigger('processStart');
+                    },
+                    success: function (data, status, xhr) {
+                        if (data['result'] === 'ok') {
+                            window.location = "<?php echo $this->getBaseUrl() . 'checkout/onepage/success'?>";
+                        }
+                        if (data['result'] === 'notok') {
+                            window.location = "<?php echo $this->getBaseUrl() . 'customer/account'?>";
+                        }
+                        $('body').trigger('processStop');
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        console.log('Error happens. Try again.');
+                        console.log(errorThrown);
+                        $('body').trigger('processStop');
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+

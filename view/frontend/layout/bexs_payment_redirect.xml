@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <script src="https://apis.bexs.com.br/v1/lib/checkout-bexs.js" src_type="url"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block
+                class="MagArs\Bexs\Block\Redirect"
+                template="MagArs_Bexs::redirect.phtml"
+                name="bexs.redirect" cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>
