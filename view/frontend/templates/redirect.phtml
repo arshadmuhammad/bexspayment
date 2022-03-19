@@ -25,7 +25,7 @@
         const options = {
             paymentSuccess: () => {
                 console.log("Payment success");
-                window.location = '<?php echo $block->getIframeURL($block->getBexsId()) ?>';
+                window.location = '<?php echo $block->getIframeURL() ?>';
             },
             paymentFail: () => {
                 console.log("Payment fail");
